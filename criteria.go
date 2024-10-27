@@ -9,12 +9,12 @@ type criteria struct {
 
 // HasFilters implements Criteria.
 func (c *criteria) HasFilters() bool {
-	return !c.order.IsNone()
+	return !c.filters.IsEmpty()
 }
 
 // HasOrder implements Criteria.
 func (c *criteria) HasOrder() bool {
-	return !c.filters.IsEmpty()
+	return !c.order.IsNone()
 }
 
 // GetFilters implements Criteria.
