@@ -11,3 +11,7 @@ const (
 func (o OrderType) isNone() bool {
 	return o == NONE
 }
+
+func (o OrderType) GetValue() string {
+	return string(o)
+}

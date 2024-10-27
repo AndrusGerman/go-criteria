@@ -13,24 +13,24 @@ const (
 	NOT_CONTAINS          Operator = "NOT_CONTAINS"
 )
 
-func (o Operator) isContains() bool {
+func (o Operator) IsContains() bool {
 	return o == CONTAINS
 }
-func (o Operator) isNotContains() bool {
+func (o Operator) IsNotContains() bool {
 	return o == NOT_CONTAINS
 }
-func (o Operator) isNotEquals() bool {
+func (o Operator) IsNotEquals() bool {
 	return o == NOT_EQUAL
 }
-func (o Operator) isGreaterThan() bool {
+func (o Operator) IsGreaterThan() bool {
 	return o == GREATER_THAN
 }
-func (o Operator) isGreaterThanOrEqual() bool {
+func (o Operator) IsGreaterThanOrEqual() bool {
 	return o == GREATER_THAN_OR_EQUAL
 }
-func (o Operator) isLowerThan() bool {
+func (o Operator) IsLowerThan() bool {
 	return o == LOWER_THAN
 }
-func (o Operator) isLowerThanOrEqual() bool {
+func (o Operator) IsLowerThanOrEqual() bool {
 	return o == LOWER_THAN_OR_EQUAL
 }
