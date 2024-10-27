@@ -96,7 +96,6 @@ func (ctmsc *CriteriaToMySqlConverter) generateWhereQuery(
 
 	} else {
 		queryPart += fmt.Sprintf("%s ?", filter.GetOperator())
-		queryPart += `${filter.operator.value} ?`
 		param = value
 
 	}

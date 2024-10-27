@@ -26,9 +26,9 @@ func (cfuc *CriteriaFromUrlConverter) ToCriteria(url *gourl.URL) (criteria.Crite
 			url.Query().Get("order"),
 		)
 
-	// if !url.Query().Has("order") {
-	// 	criteriaBuilder.Order(criteria.NewOrderNone())
-	// }
+	if !url.Query().Has("order") {
+		criteriaBuilder.Order(criteria.NewOrderNone())
+	}
 
 	if url.Query().Has("pageSize") {
 		var pageSize, err = strconv.Atoi(url.Query().Get("pageSize"))
