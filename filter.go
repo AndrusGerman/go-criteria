@@ -70,3 +70,11 @@ func NewFilterFromPrimitives(field string, operator string, value string) Filter
 		value:    NewFilterValue(value),
 	}
 }
+
+func NewFilterPrimitive(field string, operator string, value string) FiltersPrimitive {
+	return &filtersPrimitive{
+		Field:    field,
+		Operator: operator,
+		Value:    value,
+	}
+}
