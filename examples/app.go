@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/AndrusGerman/go-criteria"
+	criteriatomysql "github.com/AndrusGerman/go-criteria/driver/criteria-to-mysql"
 )
 
 func main() {
@@ -13,16 +14,23 @@ func main() {
 		Filters(
 			criteria.NewFilters(
 				[]criteria.Filter{
-					criteria.NewFilter(criteria.NewFilterField("X"), criteria.CONTAINS, criteria.NewFilterValue("Y")),
+					criteria.NewFilter(criteria.NewFilterField("companyName"), criteria.CONTAINS, criteria.NewFilterValue("ppl")),
 				},
 			)).
 		Order(
-			criteria.NewOrder(criteria.NewOrderBy("X"), criteria.ASC),
+			criteria.NewOrder(criteria.NewOrderBy("createdAt"), criteria.ASC),
 		).
 		GetCriteria()
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(criteria.GetOrder().GetOrderBy())
+	var sql, params = criteriatomysql.NewCriteriaToMySqlConverter().Convert(
+		[]string{"userId"},
+		"companies",
+		criteria,
+		nil,
+	)
+
+	fmt.Println(sql, params)
 }

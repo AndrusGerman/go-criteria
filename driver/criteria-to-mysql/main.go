@@ -22,6 +22,9 @@ func (ctmsc *CriteriaToMySqlConverter) Convert(
 ) (string, []any) {
 	var query = fmt.Sprintf("SELECT %s FROM %s", strings.Join(fieldsToSelect, ", "), tableName)
 	var params []any
+	if mappings == nil {
+		mappings = make(map[string]string)
+	}
 
 	if criteria.HasFilters() {
 		query += " WHERE "
