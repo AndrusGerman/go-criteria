@@ -1,16 +1,16 @@
 package criteria
 
 type FilterValue interface {
-	GetValue() string
+	GetValue() any
 }
 type filterValue struct {
-	value string
+	value any
 }
 
-func (f *filterValue) GetValue() string {
+func (f *filterValue) GetValue() any {
 	return f.value
 }
 
-func NewFilterValue(value string) FilterValue {
+func NewFilterValue(value any) FilterValue {
 	return &filterValue{value: value}
 }

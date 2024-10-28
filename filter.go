@@ -3,13 +3,13 @@ package criteria
 type filtersPrimitive struct {
 	Field    string
 	Operator string
-	Value    string
+	Value    any
 }
 
 type FiltersPrimitive interface {
 	GetField() string
 	GetOperator() string
-	GetValue() string
+	GetValue() any
 }
 
 type filter struct {
@@ -21,7 +21,7 @@ type filter struct {
 func (f *filtersPrimitive) GetField() string {
 	return f.Field
 }
-func (f *filtersPrimitive) GetValue() string {
+func (f *filtersPrimitive) GetValue() any {
 	return f.Value
 }
 func (f *filtersPrimitive) GetOperator() string {
@@ -63,7 +63,7 @@ func NewFilter(field FilterField, operator Operator, value FilterValue) Filter {
 	}
 }
 
-func NewFilterFromPrimitives(field string, operator string, value string) Filter {
+func NewFilterFromPrimitives(field string, operator string, value any) Filter {
 	return &filter{
 		field:    NewFilterField(field),
 		operator: Operator(operator),

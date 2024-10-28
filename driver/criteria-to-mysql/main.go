@@ -59,7 +59,7 @@ func (ctmsc *CriteriaToMySqlConverter) Convert(
 func (ctmsc *CriteriaToMySqlConverter) generateWhereQuery(
 	filter criteria.Filter,
 	mappings map[string]string,
-) (queryPart string, param string) {
+) (queryPart string, param any) {
 
 	var field, ok = mappings[filter.GetField().GetValue()]
 	if !ok {
@@ -71,17 +71,16 @@ func (ctmsc *CriteriaToMySqlConverter) generateWhereQuery(
 
 	if filter.GetOperator().IsContains() {
 		queryPart += "LIKE ?"
-		param = "%" + value + "%"
+		param = "%" + fmt.Sprint(value) + "%"
 	} else if filter.GetOperator().IsNotContains() {
 		queryPart += "NOT LIKE ?"
-		param = "%" + value + "%"
+		param = "%" + fmt.Sprint(value) + "%"
 	} else if filter.GetOperator().IsNotEquals() {
 		queryPart += "!= ?"
 		param = value
 	} else if filter.GetOperator().IsGreaterThan() {
 		queryPart += "> ?"
 		param = value
-
 	} else if filter.GetOperator().IsGreaterThanOrEqual() {
 		queryPart += ">= ?"
 		param = value

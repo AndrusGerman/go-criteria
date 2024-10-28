@@ -23,23 +23,25 @@ func (ctmsc *CriteriaToMongodb) Convert(
 	}
 
 	if criteria.HasFilters() {
-		var groupFilterValue = make(map[string][]gocriteria.Filter)
-		for _, value := range criteria.GetFilters().GetValue() {
+		var andElements []map[string]any
 
-			var field, ok = mappings[value.GetField().GetValue()]
+		for _, filter := range criteria.GetFilters().GetValue() {
+			var field, ok = mappings[filter.GetField().GetValue()]
 			if !ok {
-				field = value.GetField().GetValue()
+				field = filter.GetField().GetValue()
 			}
-			groupFilterValue[field] = append(groupFilterValue[value.GetField().GetValue()], value)
+			var elemtQuery, filterValue = ctmsc.generateWhereQuery(filter)
+			andElements = append(andElements, map[string]any{
+				field: map[string]any{
+					elemtQuery: filterValue,
+				},
+			})
 		}
 
-		var match = make(map[string]any)
-
-		for key, filters := range groupFilterValue {
-			match[key] = ctmsc.createQueryForField(filters)
-		}
 		query = append(query, map[string]any{
-			"$match": match,
+			"$match": map[string]any{
+				"$and": andElements,
+			},
 		})
 
 	}
@@ -51,6 +53,7 @@ func (ctmsc *CriteriaToMongodb) Convert(
 		})
 	}
 
+	// page number
 	var pageSize = criteria.GetPageSize()
 	var pageNumber = criteria.GetPageNumber()
 	if pageSize != nil && pageNumber != nil {
@@ -60,10 +63,16 @@ func (ctmsc *CriteriaToMongodb) Convert(
 		params = append(params, (*pageSize)*((*pageNumber)-1))
 	}
 
+	// page size
 	if pageSize != nil {
 		query = append(query, map[string]any{
 			"$limit": *pageSize,
 		})
+	}
+
+	// project result
+	if fieldsToSelect == nil || len(fieldsToSelect) == 0 {
+		return query
 	}
 
 	var project = make(map[string]any)
@@ -90,16 +99,6 @@ func (ctmsc *CriteriaToMongodb) generateSortTypeMongo(orderType gocriteria.Order
 	}
 }
 
-func (ctmsc *CriteriaToMongodb) createQueryForField(filters []gocriteria.Filter) map[string]any {
-	var queryField = make(map[string]any)
-	for _, filter := range filters {
-		var field, value = ctmsc.generateWhereQuery(filter)
-		queryField[field] = value
-	}
-
-	return queryField
-}
-
 func (ctmsc *CriteriaToMongodb) generateWhereQuery(
 	filter gocriteria.Filter,
 ) (fieldQuery string, valueQuery any) {
@@ -109,13 +108,16 @@ func (ctmsc *CriteriaToMongodb) generateWhereQuery(
 		fieldQuery = "$regex"
 		valueQuery = filterValue
 	} else if filter.GetOperator().IsNotContains() {
+		fieldQuery = "$not"
+		valueQuery = map[string]any{
+			"$regex": filterValue,
+		}
 	} else if filter.GetOperator().IsNotEquals() {
 		fieldQuery = "$ne"
 		valueQuery = filterValue
 	} else if filter.GetOperator().IsGreaterThan() {
 		fieldQuery = "$gt"
 		valueQuery = filterValue
-
 	} else if filter.GetOperator().IsGreaterThanOrEqual() {
 		fieldQuery = "$gte"
 		valueQuery = filterValue
