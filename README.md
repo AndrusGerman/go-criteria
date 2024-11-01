@@ -18,28 +18,64 @@ go get github.com/AndrusGerman/go-criteria
 
 ## 🎉 Examples
 
-* MYSQL
+* MYSQL from URL
 ```go
 var urlParse, err = url.Parse("http://localhost:3000/api/users?filters[0][field]=name&filters[0][operator]=CONTAINS&filters[0][value]=Javi")
-	if err != nil {
-		panic(err)
-	}
+if err != nil {
+	panic(err)
+}
 
-	crit, err := criteriafromurl.NewCriteriaFromUrlConverter().ToCriteria(urlParse)
-	if err != nil {
-		panic(err)
-	}
+crit, err := criteriafromurl.NewCriteriaFromUrlConverter().ToCriteria(urlParse)
+if err != nil {
+	panic(err)
+}
 
-	var sql, params = criteriatomysql.NewCriteriaToMySqlConverter().Convert(
-		[]string{"userId"},
-		"users",
-		crit,
-		nil,
-	)
-
+var sql, params = criteriatomysql.NewCriteriaToMySqlConverter().Convert(
+	[]string{"userId"},
+	"users",
+	crit,
+	nil,
+)
 ```
 
 out: `SELECT userId FROM users WHERE name LIKE ?` params: `[%Javi%]`
+
+
+* CUSTOM criteria
+```go
+var crit, err = criteria.NewCriteriaBuilder().
+	Order(criteria.NewOrderNone()).
+	Filters(
+		criteria.NewFilters(
+			[]criteria.Filter{
+				criteria.NewFilter(
+					criteria.NewFilterField("userId"),
+					criteria.EQUAL,
+					criteria.NewFilterValue("10"),
+				),
+				criteria.NewFilter(
+					criteria.NewFilterField("companyId"),
+					criteria.GREATER_THAN,
+					criteria.NewFilterValue("12"),
+				),
+				criteria.NewFilter(
+					criteria.NewFilterField("companyName"),
+					criteria.CONTAINS,
+					criteria.NewFilterValue("app"),
+				),
+			},
+		),
+	).GetCriteria()
+```
+
+* criteria to MongoDB
+```go
+var query = criteriatomongodb.NewCriteriaToMongodb().Convert(
+	[]string{},
+	crit,
+	nil,
+)
+```
 
 ## 🐂 Thanks
 
