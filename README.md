@@ -2,10 +2,10 @@
   🎼 Criteria for Go
 </h1>
 
-<p align="center">
+<!-- <p align="center">
     <a href="https://github.com/CodelyTV"><img src="https://img.shields.io/badge/Codely-OS-green.svg?style=flat-square" alt="Codely Open Source projects"/></a>
     <a href="https://pro.codely.com"><img src="https://img.shields.io/badge/Codely-Pro-black.svg?style=flat-square" alt="Codely Pro courses"/></a>
-</p>
+</p> -->
 
 ## 📥 Installation
 
