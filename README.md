@@ -15,6 +15,32 @@ To install the base criteria dependency, run the following command:
 go get github.com/AndrusGerman/go-criteria
 ```
 
+
+## 🎉 Examples
+
+* MYSQL
+```go
+var urlParse, err = url.Parse("http://localhost:3000/api/users?filters[0][field]=name&filters[0][operator]=CONTAINS&filters[0][value]=Javi")
+	if err != nil {
+		panic(err)
+	}
+
+	crit, err := criteriafromurl.NewCriteriaFromUrlConverter().ToCriteria(urlParse)
+	if err != nil {
+		panic(err)
+	}
+
+	var sql, params = criteriatomysql.NewCriteriaToMySqlConverter().Convert(
+		[]string{"userId"},
+		"users",
+		crit,
+		nil,
+	)
+
+```
+
+out: `SELECT userId FROM users WHERE name LIKE ?` params: `[%Javi%]`
+
 ## 🐂 Thanks
 
 This package is initially inspired by the implementation of typescript-criteria created by codelyTv
