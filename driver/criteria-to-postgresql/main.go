@@ -26,10 +26,10 @@ func (ctmsc *CriteriaToPostgreSQLConverter) Convert(
 		mappings = make(map[string]string)
 	}
 
+	var queryIndex = 1
 	if criteria.HasFilters() {
 		query += " WHERE "
 		var whereQuery []string
-		var queryIndex = 1
 		for _, value := range criteria.GetFilters().GetValue() {
 			var queryPart, param = ctmsc.generateWhereQuery(value, mappings, queryIndex)
 			whereQuery = append(whereQuery, queryPart)
@@ -38,20 +38,24 @@ func (ctmsc *CriteriaToPostgreSQLConverter) Convert(
 		}
 		query += strings.Join(whereQuery, " AND ")
 	}
+
 	if criteria.HasOrder() {
-		query += " ORDER BY ? ?"
+		query += fmt.Sprintf(" ORDER BY $%d $%d", queryIndex, queryIndex+1)
+		queryIndex += 2
 		params = append(params, criteria.GetOrder().GetOrderBy().GetValue(), criteria.GetOrder().GetOrderType().GetValue())
 	}
 
 	var pageSize = criteria.GetPageSize()
 	if pageSize != nil {
-		query += " LIMIT ?"
+		query += fmt.Sprintf(" LIMIT $%d", queryIndex)
+		queryIndex++
 		params = append(params, pageSize)
 	}
 
 	var pageNumber = criteria.GetPageNumber()
 	if pageSize != nil && pageNumber != nil {
-		query += " OFFSET ?"
+		query += fmt.Sprintf(" OFFSET $%d", queryIndex)
+		queryIndex++
 		params = append(params, (*pageSize)*((*pageNumber)-1))
 	}
 
