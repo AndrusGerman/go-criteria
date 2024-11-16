@@ -40,9 +40,7 @@ func (ctmsc *CriteriaToPostgreSQLConverter) Convert(
 	}
 
 	if criteria.HasOrder() {
-		query += fmt.Sprintf(" ORDER BY $%d $%d", queryIndex, queryIndex+1)
-		queryIndex += 2
-		params = append(params, criteria.GetOrder().GetOrderBy().GetValue(), criteria.GetOrder().GetOrderType().GetValue())
+		query += fmt.Sprintf(" ORDER BY %s %s", criteria.GetOrder().GetOrderBy().GetValue(), criteria.GetOrder().GetOrderType().GetValue())
 	}
 
 	var pageSize = criteria.GetPageSize()
