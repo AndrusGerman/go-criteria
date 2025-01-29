@@ -116,3 +116,15 @@ func (cb *CriteriaBuilder) GetCriteria() (Criteria, error) {
 		pageNumber: cb.pageNumber,
 	}, nil
 }
+
+func (cb *CriteriaBuilder) MustGetCriteria() Criteria {
+	criteria, err := cb.GetCriteria()
+	if err != nil {
+		panic(err)
+	}
+	return criteria
+}
+
+func EmptyCriteria() Criteria {
+	return NewCriteriaBuilder().MustGetCriteria()
+}
