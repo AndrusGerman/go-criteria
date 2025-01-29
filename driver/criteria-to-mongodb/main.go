@@ -26,9 +26,9 @@ func (ctmsc *CriteriaToMongodb) Convert(
 		var andElements []map[string]any
 
 		for _, filter := range criteria.GetFilters().GetValue() {
-			var field, ok = mappings[filter.GetField().GetValue()]
+			var field, ok = mappings[filter.GetField().String()]
 			if !ok {
-				field = filter.GetField().GetValue()
+				field = filter.GetField().String()
 			}
 			var elemtQuery, filterValue = ctmsc.generateWhereQuery(filter)
 			andElements = append(andElements, map[string]any{
@@ -48,7 +48,7 @@ func (ctmsc *CriteriaToMongodb) Convert(
 	if criteria.HasOrder() {
 		query = append(query, map[string]any{
 			"$sort": map[string]any{
-				criteria.GetOrder().GetOrderBy().GetValue(): ctmsc.generateSortTypeMongo(criteria.GetOrder().GetOrderType()),
+				criteria.GetOrder().GetOrderBy().GetByField(): ctmsc.generateSortTypeMongo(criteria.GetOrder().GetOrderType()),
 			},
 		})
 	}

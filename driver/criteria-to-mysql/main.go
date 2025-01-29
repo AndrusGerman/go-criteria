@@ -38,7 +38,7 @@ func (ctmsc *CriteriaToMySqlConverter) Convert(
 	}
 	if criteria.HasOrder() {
 		query += " ORDER BY ? ?"
-		params = append(params, criteria.GetOrder().GetOrderBy().GetValue(), criteria.GetOrder().GetOrderType().GetValue())
+		params = append(params, criteria.GetOrder().GetOrderBy().GetByField(), criteria.GetOrder().GetOrderType().GetValue())
 	}
 
 	var pageSize = criteria.GetPageSize()
@@ -61,9 +61,9 @@ func (ctmsc *CriteriaToMySqlConverter) generateWhereQuery(
 	mappings map[string]string,
 ) (queryPart string, param any) {
 
-	var field, ok = mappings[filter.GetField().GetValue()]
+	var field, ok = mappings[filter.GetField().String()]
 	if !ok {
-		field = filter.GetField().GetValue()
+		field = filter.GetField().String()
 	}
 
 	queryPart = fmt.Sprintf("%s ", field)

@@ -1,16 +1,11 @@
 package criteria
 
-type FilterField interface {
-	GetValue() string
-}
-type filterField struct {
-	value string
-}
+type FilterField string
 
-func (f *filterField) GetValue() string {
-	return f.value
+func (f FilterField) String() string {
+	return string(f)
 }
 
 func NewFilterField(value string) FilterField {
-	return &filterField{value: value}
+	return FilterField(value)
 }

@@ -99,10 +99,10 @@ func (cb *CriteriaBuilder) Copy() *CriteriaBuilder {
 
 func (cb *CriteriaBuilder) GetCriteria() (Criteria, error) {
 	if cb.filters == nil {
-		return nil, ERR_CRITERIA_BUILDER_FILTERS_NOT_DEFINED
+		cb.filters = NewFiltersNone()
 	}
 	if cb.order == nil {
-		return nil, ERR_CRITERIA_BUILDER_ORDER_NOT_DEFINED
+		cb.order = NewOrderNone()
 	}
 
 	if cb.pageNumber != nil && cb.pageSize == nil {

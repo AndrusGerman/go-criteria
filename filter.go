@@ -49,7 +49,7 @@ type Filter interface {
 
 func (f *filter) ToPrimitives() FiltersPrimitive {
 	return &filtersPrimitive{
-		Field:    f.field.GetValue(),
+		Field:    f.field.String(),
 		Operator: string(f.operator),
 		Value:    f.value.GetValue(),
 	}

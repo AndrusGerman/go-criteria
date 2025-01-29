@@ -40,7 +40,7 @@ func (ctmsc *CriteriaToPostgreSQLConverter) Convert(
 	}
 
 	if criteria.HasOrder() {
-		query += fmt.Sprintf(" ORDER BY %s %s", criteria.GetOrder().GetOrderBy().GetValue(), criteria.GetOrder().GetOrderType().GetValue())
+		query += fmt.Sprintf(" ORDER BY %s %s", criteria.GetOrder().GetOrderBy().GetByField(), criteria.GetOrder().GetOrderType().GetValue())
 	}
 
 	var pageSize = criteria.GetPageSize()
@@ -66,9 +66,9 @@ func (ctmsc *CriteriaToPostgreSQLConverter) generateWhereQuery(
 	queryIndex int,
 ) (queryPart string, param any) {
 
-	var field, ok = mappings[filter.GetField().GetValue()]
+	var field, ok = mappings[filter.GetField().String()]
 	if !ok {
-		field = filter.GetField().GetValue()
+		field = filter.GetField().String()
 	}
 
 	queryPart = fmt.Sprintf("%s ", field)

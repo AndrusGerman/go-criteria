@@ -33,6 +33,10 @@ func NewFilters(value []Filter) Filters {
 	return &filters{value: value}
 }
 
+func NewFiltersNone() Filters {
+	return &filters{value: make([]Filter, 0)}
+}
+
 func NewFiltersFromPrimitives(filtersPrimitive []FiltersPrimitive) Filters {
 	var filters []Filter = make([]Filter, len(filtersPrimitive))
 	for i := range filtersPrimitive {
