@@ -57,13 +57,13 @@ func NewCriteriaBuilder() *CriteriaBuilder {
 	return &CriteriaBuilder{}
 }
 
-func (cb *CriteriaBuilder) Filters(filters Filters) *CriteriaBuilder {
-	cb.filters = filters
+func (cb *CriteriaBuilder) Filters(filters ...Filter) *CriteriaBuilder {
+	cb.filters = NewFilters(filters)
 	return cb
 }
 
 func (cb *CriteriaBuilder) FiltersPrimitive(filters []FiltersPrimitive) *CriteriaBuilder {
-	return cb.Filters(NewFiltersFromPrimitives(filters))
+	return cb.Filters(NewFiltersFromPrimitives(filters)...)
 }
 
 func (cb *CriteriaBuilder) Order(order Order) *CriteriaBuilder {

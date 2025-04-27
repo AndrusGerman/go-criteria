@@ -18,24 +18,20 @@ func main() {
 			),
 		).
 		Filters(
-			criteria.NewFilters(
-				[]criteria.Filter{
-					criteria.NewFilter(
-						criteria.NewFilterField("title"),
-						criteria.EQUAL,
-						criteria.NewFilterValue("booking title"),
-					),
-					criteria.NewFilter(
-						criteria.NewFilterField("status"),
-						criteria.NOT_EQUAL,
-						criteria.NewFilterValue("Canceled"),
-					),
-					criteria.NewFilter(
-						criteria.NewFilterField("capacity"),
-						criteria.LOWER_THAN,
-						criteria.NewFilterValue(2),
-					),
-				},
+			criteria.NewFilterType(
+				criteria.NewFilterField("title"),
+				criteria.EQUAL,
+				criteria.NewFilterValue("booking title"),
+			),
+			criteria.NewFilterType(
+				criteria.NewFilterField("status"),
+				criteria.NOT_EQUAL,
+				criteria.NewFilterValue("Canceled"),
+			),
+			criteria.NewFilterType(
+				criteria.NewFilterField("capacity"),
+				criteria.LOWER_THAN,
+				criteria.NewFilterValue(2),
 			),
 		).GetCriteria()
 

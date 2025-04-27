@@ -55,7 +55,15 @@ func (f *filter) ToPrimitives() FiltersPrimitive {
 	}
 }
 
-func NewFilter(field FilterField, operator Operator, value FilterValue) Filter {
+func NewFilter(field string, operator Operator, value any) Filter {
+	return &filter{
+		field:    NewFilterField(field),
+		operator: operator,
+		value:    NewFilterValue(value),
+	}
+}
+
+func NewFilterType(field FilterField, operator Operator, value FilterValue) Filter {
 	return &filter{
 		field:    field,
 		operator: operator,

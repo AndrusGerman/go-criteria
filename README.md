@@ -46,24 +46,20 @@ out: `SELECT userId FROM users WHERE name LIKE ?` params: `[%Javi%]`
 var crit, err = criteria.NewCriteriaBuilder().
 	Order(criteria.NewOrderNone()).
 	Filters(
-		criteria.NewFilters(
-			[]criteria.Filter{
-				criteria.NewFilter(
-					criteria.NewFilterField("userId"),
-					criteria.EQUAL,
-					criteria.NewFilterValue("10"),
-				),
-				criteria.NewFilter(
-					criteria.NewFilterField("companyId"),
-					criteria.GREATER_THAN,
-					criteria.NewFilterValue("12"),
-				),
-				criteria.NewFilter(
-					criteria.NewFilterField("companyName"),
-					criteria.CONTAINS,
-					criteria.NewFilterValue("app"),
-				),
-			},
+		criteria.NewFilter(
+			"userId",
+			criteria.EQUAL,
+			"10",
+		),
+		criteria.NewFilter(
+			"companyId",
+			criteria.GREATER_THAN,
+			"12",
+		),
+		criteria.NewFilter(
+			"companyName",
+			criteria.CONTAINS,
+			"app",
 		),
 	).GetCriteria()
 ```

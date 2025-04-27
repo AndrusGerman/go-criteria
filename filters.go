@@ -37,7 +37,7 @@ func NewFiltersNone() Filters {
 	return &filters{value: make([]Filter, 0)}
 }
 
-func NewFiltersFromPrimitives(filtersPrimitive []FiltersPrimitive) Filters {
+func NewFiltersFromPrimitives(filtersPrimitive []FiltersPrimitive) []Filter {
 	var filters []Filter = make([]Filter, len(filtersPrimitive))
 	for i := range filtersPrimitive {
 		filters[i] = NewFilterFromPrimitives(
@@ -46,6 +46,5 @@ func NewFiltersFromPrimitives(filtersPrimitive []FiltersPrimitive) Filters {
 			filtersPrimitive[i].GetValue(),
 		)
 	}
-
-	return NewFilters(filters)
+	return filters
 }
