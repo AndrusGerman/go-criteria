@@ -17,7 +17,6 @@ func (ctmsc *CriteriaToMongodb) Convert(
 	mappings map[string]string,
 ) []map[string]any {
 	var query []map[string]any
-	var params []any
 	if mappings == nil {
 		mappings = make(map[string]string)
 	}
@@ -54,19 +53,21 @@ func (ctmsc *CriteriaToMongodb) Convert(
 	}
 
 	// page number
-	var pageSize = criteria.GetPageSize()
-	var pageNumber = criteria.GetPageNumber()
-	if pageSize != nil && pageNumber != nil {
+	var pageSizePointer = criteria.GetPageSize()
+	var pageNumberPointer = criteria.GetPageNumber()
+	if pageSizePointer != nil && pageNumberPointer != nil {
+		var pageSize = *pageSizePointer
+		var pageNumber = *pageNumberPointer
 		query = append(query, map[string]any{
-			"$skip": *pageSize,
+			"$skip": pageSize * (pageNumber - 1),
 		})
-		params = append(params, (*pageSize)*((*pageNumber)-1))
 	}
 
 	// page size
-	if pageSize != nil {
+	if pageSizePointer != nil {
+		var pageSize = *pageSizePointer
 		query = append(query, map[string]any{
-			"$limit": *pageSize,
+			"$limit": pageSize,
 		})
 	}
 
